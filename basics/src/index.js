@@ -1,32 +1,14 @@
 import { GraphQLServer } from 'graphql-yoga';
 
 // Demo User data
-
-const users = [
-  {
-    id: '1',
-    name: 'Matin',
-    email: 'lol@loland.com',
-    age: 27
-  },
-  {
-    id: '2',
-    name: 'Mobin',
-    email: 'lol2@loland.com',
-    age: 26
-  },
-  {
-    id: '3',
-    name: 'nobody',
-    email: 'ghost@ghost.com'
-  }
-];
+import { users, posts } from './fakeData';
 
 // type definition (schema)
 const typeDefs = `
 
 type Query {
   users(query: String): [User!]!
+  posts(query: String): [Post!]!
   me: User!
   post: Post!
   greeting(name: String, hobby: String): String!
@@ -44,6 +26,7 @@ type Post {
   title: String!
   body: String!
   published: Boolean!
+  author: User!
 }
 
 `;
@@ -68,6 +51,14 @@ const resolvers = {
         return 'Hello Stranger';
       }
     },
+    posts(parent, args, ctx, info) {
+      if (!args.query) {
+        return posts;
+      }
+      return posts.filter(user => {
+        return post.name.toLowerCase().includes(args.query.toLowerCase());
+      });
+    },
     me() {
       return {
         id: '1234',
@@ -82,6 +73,13 @@ const resolvers = {
         body: '',
         published: false
       };
+    }
+  },
+  Post: {
+    author(parent, args, ctx, info) {
+      return users.find(user => {
+        return user.id === parent.author;
+      });
     }
   }
 };
