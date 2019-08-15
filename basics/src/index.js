@@ -6,6 +6,7 @@ const typeDefs = `
 type Query {
   me: User!
   post: Post!
+  greeting(name: String, hobby: String): String!
 }
 
 type User {
@@ -27,6 +28,15 @@ type Post {
 // Resolvers
 const resolvers = {
   Query: {
+    greeting(parent, args, ctx, info) {
+      if (args.name && args.hobby) {
+        return `Hello ${args.name} and I love ${args.hobby} :D`;
+      } else if (args.name) {
+        return `Hello ${args.name} :D`;
+      } else {
+        return 'Hello Stranger';
+      }
+    },
     me() {
       return {
         id: '1234',
