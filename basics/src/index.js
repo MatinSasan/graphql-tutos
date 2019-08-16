@@ -1,7 +1,7 @@
 import { GraphQLServer } from 'graphql-yoga';
 
 // Demo User data
-import { users, posts } from './fakeData';
+import { users, posts, comments } from './fakeData';
 
 // type definition (schema)
 const typeDefs = `
@@ -9,6 +9,7 @@ const typeDefs = `
 type Query {
   users(query: String): [User!]!
   posts(query: String): [Post!]!
+  comments: [Comment!]!
   me: User!
   post: Post!
   greeting(name: String, hobby: String): String!
@@ -20,6 +21,7 @@ type User {
   email: String!
   age: Int
   posts: [Post]!
+  comments: [Comment!]!
 }
 
 type Post {
@@ -28,6 +30,14 @@ type Post {
   body: String!
   published: Boolean!
   author: User!
+  comments:[Comment!]!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  author: User!
+  post: Post!
 }
 
 `;
@@ -60,6 +70,9 @@ const resolvers = {
         return post.name.toLowerCase().includes(args.query.toLowerCase());
       });
     },
+    comments(parent, args, ctx, info) {
+      return comments;
+    },
     me() {
       return {
         id: '1234',
@@ -81,12 +94,34 @@ const resolvers = {
       return users.find(user => {
         return user.id === parent.author;
       });
+    },
+    comments(parent, args, ctx, info) {
+      return comments.filter(comment => {
+        return comment.post === parent.id;
+      });
     }
   },
   User: {
     posts(parent, args, ctx, info) {
       return posts.filter(post => {
         return post.author === parent.id;
+      });
+    },
+    comments(parent, argss, ctx, info) {
+      return comments.filter(comment => {
+        return comment.author === parent.id;
+      });
+    }
+  },
+  Comment: {
+    author(parent, args, ctx, info) {
+      return users.find(user => {
+        return user.id === parent.author;
+      });
+    },
+    post(parent, args, ctx, info) {
+      return posts.find(post => {
+        return post.id === parent.post;
       });
     }
   }
