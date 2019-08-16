@@ -37,7 +37,7 @@ const posts = [
     id: '12',
     title: 'mastering graphql',
     body: 'mastering something takes time',
-    published: false,
+    published: true,
     author: '3'
   }
 ];
