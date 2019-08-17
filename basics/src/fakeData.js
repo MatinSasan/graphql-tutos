@@ -1,4 +1,4 @@
-export let users = [
+const users = [
   {
     id: '1',
     name: 'Matin',
@@ -18,7 +18,7 @@ export let users = [
   }
 ];
 
-export let posts = [
+const posts = [
   {
     id: '10',
     title: 'learning graphql',
@@ -42,7 +42,7 @@ export let posts = [
   }
 ];
 
-export let comments = [
+const comments = [
   {
     id: '101',
     text: 'this is some stupid comment',
@@ -68,3 +68,11 @@ export let comments = [
     post: '12'
   }
 ];
+
+const db = {
+  users,
+  posts,
+  comments
+};
+
+export { db as default };
