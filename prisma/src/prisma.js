@@ -92,6 +92,6 @@ const updatePostForUser = async (postId, data) => {
 //   })
 //   .catch(err => console.log(err));
 
-updatePostForUser('cjzl18h7800f407159r0fw3g2', { published: false })
-  .then(user => console.log(JSON.stringify(user, undefined, 2)))
-  .catch(err => console.log(err.message));
+// updatePostForUser('cjzl18h7800f407159r0fw3g2', { published: false })
+//   .then(user => console.log(JSON.stringify(user, undefined, 2)))
+//   .catch(err => console.log(err.message));
