@@ -16,8 +16,8 @@ const resolvers = {
   Query,
   Mutation,
   Subscription,
-  Post,
   User,
+  Post,
   Comment
 };
 

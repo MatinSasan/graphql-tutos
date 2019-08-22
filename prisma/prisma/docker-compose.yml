@@ -10,15 +10,14 @@ services:
         port: 4466
         # uncomment the next line and provide the env var PRISMA_MANAGEMENT_API_SECRET=my-secret to activate cluster security
         # managementApiSecret: my-secret
+        # SET LOCAL DB (saved me a lot of headache)
         databases:
           default:
             connector: postgres
-            host: ${HOST}
-            database: ${DATABASE}
+            host: host.docker.internal
+            database: prisma
             schema: public
-            user: ${USER}
+            user: postgres
             password: ${PASS}
-            ssl: true
-            rawAccess: true
             port: '5432'
             migrations: true
