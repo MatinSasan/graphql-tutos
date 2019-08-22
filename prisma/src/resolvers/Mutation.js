@@ -1,8 +1,23 @@
-import uuidv4 from 'uuid/v4';
+import bcrypt from 'bcryptjs';
 
 const Mutation = {
-  async createUser(parent, args, { prisma }, info) {
-    return await prisma.mutation.createUser({ data: args.data }, info);
+  async createUser(parent, { data }, { prisma }, info) {
+    const { password: pass } = data;
+    if (pass.length < 5) {
+      throw new Error('Password must be 5 characters or longer');
+    }
+
+    const password = await bcrypt.hash(pass, 10);
+
+    return await prisma.mutation.createUser(
+      {
+        data: {
+          ...data,
+          password
+        }
+      },
+      info
+    );
   },
   async deleteUser(parent, args, { prisma }, info) {
     return prisma.mutation.deleteUser(
