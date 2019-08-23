@@ -1,4 +1,6 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+require('dotenv').config();
 
 const Mutation = {
   async createUser(parent, { data }, { prisma }, info) {
@@ -8,16 +10,17 @@ const Mutation = {
     }
 
     const password = await bcrypt.hash(pass, 10);
+    const user = await prisma.mutation.createUser({
+      data: {
+        ...data,
+        password
+      }
+    });
 
-    return await prisma.mutation.createUser(
-      {
-        data: {
-          ...data,
-          password
-        }
-      },
-      info
-    );
+    return {
+      user,
+      token: jwt.sign({ userId: user.id }, process.env.SECRET)
+    };
   },
   async deleteUser(parent, args, { prisma }, info) {
     return prisma.mutation.deleteUser(

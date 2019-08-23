@@ -19,6 +19,7 @@
     "dotenv": "^8.1.0",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.16.7",
+    "jsonwebtoken": "^8.5.1",
     "prisma": "^1.34.6",
     "prisma-binding": "^2.3.15"
   }
