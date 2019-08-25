@@ -8,9 +8,6 @@ import Post from './resolvers/Post';
 import Comment from './resolvers/Comment';
 import prisma from './prisma';
 
-// Demo User data
-import db from './fakeData';
-
 // Resolvers
 const resolvers = {
   Query,
@@ -26,7 +23,9 @@ const pubsub = new PubSub();
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
-  context: { db, pubsub, prisma }
+  context(req) {
+    return { pubsub, prisma, req };
+  }
 });
 
 server.start(({ port }) => {

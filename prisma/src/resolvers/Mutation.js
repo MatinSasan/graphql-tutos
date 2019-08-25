@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import getUserId from '../utils/getUserId';
 require('dotenv').config();
 
 const Mutation = {
@@ -62,8 +63,10 @@ const Mutation = {
       info
     );
   },
-  async createPost(parent, { data }, { prisma }, info) {
-    const { title, body, published, author } = data;
+  async createPost(parent, { data }, { prisma, req }, info) {
+    const { title, body, published } = data;
+
+    const userId = getUserId(req);
 
     return prisma.mutation.createPost(
       {
@@ -73,7 +76,7 @@ const Mutation = {
           published,
           author: {
             connect: {
-              id: author
+              id: userId
             }
           }
         }
