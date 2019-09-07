@@ -9,10 +9,8 @@ const Query = {
         OR: [
           {
             name_contains: args.query
-          },
-          {
-            email_contains: args.query
           }
+          // they shouldn't be able to query for email
         ]
       };
     }
