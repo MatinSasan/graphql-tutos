@@ -1,16 +1,13 @@
 import bcrypt from 'bcryptjs';
 import getUserId from '../utils/getUserId';
+import hashPass from '../utils/hashPass';
 import generateToken from '../utils/generateToken';
 require('dotenv').config();
 
 const Mutation = {
   async createUser(parent, { data }, { prisma }, info) {
     const { password: pass } = data;
-    if (pass.length < 5) {
-      throw new Error('Password must be 5 characters or longer');
-    }
-
-    const password = await bcrypt.hash(pass, 10);
+    const password = await hashPass(pass);
     const user = await prisma.mutation.createUser({
       data: {
         ...data,
@@ -54,15 +51,18 @@ const Mutation = {
       info
     );
   },
-  async updateUser(parent, args, { prisma, req }, info) {
+  async updateUser(parent, { data }, { prisma, req }, info) {
     const userId = getUserId(req);
+    if (typeof data.password === 'string') {
+      data.password = await hashPass(data.password);
+    }
 
     return prisma.mutation.updateUser(
       {
         where: {
           id: userId
         },
-        data: args.data
+        data
       },
       info
     );
