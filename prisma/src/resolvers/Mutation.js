@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import getUserId from '../utils/getUserId';
+import generateToken from '../utils/generateToken';
 require('dotenv').config();
 
 const Mutation = {
@@ -20,7 +20,7 @@ const Mutation = {
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, process.env.SECRET)
+      token: generateToken(user.id)
     };
   },
   async login(parent, { data }, { prisma }, info) {
@@ -39,7 +39,7 @@ const Mutation = {
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, process.env.SECRET)
+      token: generateToken(user.id)
     };
   },
   async deleteUser(parent, args, { prisma, req }, info) {
