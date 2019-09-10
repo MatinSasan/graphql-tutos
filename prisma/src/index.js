@@ -1,19 +1,4 @@
-import { GraphQLServer, PubSub } from 'graphql-yoga';
-
-import prisma from './prisma';
-
-// Resolvers
-import { resolvers, fragmentReplacements } from './resolvers/index';
-const pubsub = new PubSub();
-
-const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
-  resolvers,
-  context(req) {
-    return { pubsub, prisma, req };
-  },
-  fragmentReplacements
-});
+import server from './server';
 
 server.start(({ port }) => {
   console.log(`Server is up at port ${port}`);
